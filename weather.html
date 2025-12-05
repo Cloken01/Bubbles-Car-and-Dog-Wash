@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bubbles Car Wash – Weather</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"><!-- your existing stylesheet -->
+</head>
+
+<body>
+    <!-- NAVBAR (same as home page, just with Weather link added/active) -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <!-- Brand / Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img src="images/BubblesLogoFinal.jpg" alt="Bubbles Car Wash Logo"
+                    style="height:40px; margin-right:8px;">
+                Bubbles Car Wash
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="vacuums.html">Vacuums</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dogwash.html">Dog Wash</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="customer.html">Customer Form</a>
+                    </li>
+                    <li class="nav-item">
+                        <!-- Mark this one active on the weather page -->
+                        <a class="nav-link active" aria-current="page" href="weather.html">Weather</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="container my-5">
+        <h1 class="mb-4 text-center">Live Weather for Your Wash</h1>
+        <p class="text-center mb-4">
+            Check current weather conditions before you stop by Bubbles Car Wash!
+        </p>
+
+        <!-- Weather Search Card -->
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-3">Find Weather by City</h5>
+
+                        <!-- Form for city input -->
+                        <form id="weatherForm" class="mb-3">
+                            <div class="mb-3">
+                                <label for="cityInput" class="form-label">City</label>
+                                <input type="text" class="form-control" id="cityInput" placeholder="e.g., Davenport, US"
+                                    required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                Get Weather
+                            </button>
+                        </form>
+
+                        <!-- Status / error messages -->
+                        <div id="statusMessage" class="mb-2 text-center small text-muted"></div>
+
+                        <!-- Weather result -->
+                        <div id="weatherResult" class="text-center" style="display:none;">
+                            <h4 id="resultCity" class="mb-2"></h4>
+                            <p id="resultDescription" class="mb-1"></p>
+                            <p class="display-6 mb-1">
+                                <span id="resultTemp"></span> °F
+                            </p>
+                            <p class="mb-1">
+                                Feels like: <span id="resultFeelsLike"></span> °F
+                            </p>
+                            <p class="mb-1">
+                                Humidity: <span id="resultHumidity"></span>%
+                            </p>
+                            <p class="mb-0">
+                                Wind: <span id="resultWind"></span> mph
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS (for navbar toggler, etc.) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <!-- WEATHER JS -->
+    <script>
+        // ====== CONFIGURE YOUR API KEY HERE ======
+        // 1. Sign up for a free account at https://openweathermap.org
+        // 2. Create an API key.
+        // 3. Paste it below as a string.
+        const API_KEY = "6adc8961dd6f5d5f1f63083f1941b465";
+
+        const form = document.getElementById("weatherForm");
+        const cityInput = document.getElementById("cityInput");
+        const statusMessage = document.getElementById("statusMessage");
+        const weatherResult = document.getElementById("weatherResult");
+
+        const resultCity = document.getElementById("resultCity");
+        const resultDescription = document.getElementById("resultDescription");
+        const resultTemp = document.getElementById("resultTemp");
+        const resultFeelsLike = document.getElementById("resultFeelsLike");
+        const resultHumidity = document.getElementById("resultHumidity");
+        const resultWind = document.getElementById("resultWind");
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // stops the form from reloading the page
+
+            const city = cityInput.value.trim();
+            if (!city) {
+                statusMessage.textContent = "Please enter a city.";
+                weatherResult.style.display = "none";
+                return;
+            }
+
+            statusMessage.textContent = "Loading current weather...";
+            weatherResult.style.display = "none";
+
+            // Build the URL for OpenWeatherMap current weather API
+            // Using imperial units for °F and mph
+            const url =
+                "https://api.openweathermap.org/data/2.5/weather?q=" +
+                encodeURIComponent(city) +
+                "&units=imperial&appid=" + API_KEY;
+
+            // Fetch data from the API
+            fetch(url)
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error("City not found or API error");
+                    }
+                    return response.json();
+                })
+                .then(function (data) {
+                    // Update the page with data
+                    resultCity.textContent = data.name + ", " + (data.sys.country || "");
+                    resultDescription.textContent =
+                        data.weather && data.weather.length > 0
+                            ? data.weather[0].description
+                            : "No description available";
+
+                    resultTemp.textContent = Math.round(data.main.temp);
+                    resultFeelsLike.textContent = Math.round(data.main.feels_like);
+                    resultHumidity.textContent = data.main.humidity;
+                    resultWind.textContent = Math.round(data.wind.speed);
+
+                    weatherResult.style.display = "block";
+                    statusMessage.textContent = "";
+                })
+                .catch(function (error) {
+                    statusMessage.textContent = "Unable to load weather. " + error.message;
+                    weatherResult.style.display = "none";
+                });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+:root {
+    --bubbles-blue: #008fdc;
+    /* main blue from wash settings */
+    --bubbles-dark: #023959;
+    /* dark navy */
+    --bubbles-light: #e6f5ff;
+    /* light background */
+    --bubbles-yellow: #ffd600;
+    /* yellow labels */
+    --bubbles-accent: #ff5c5c;
+    /* red/orange accent */
+}
+
+body {
+    background: radial-gradient(circle at top left,
+            rgba(255, 255, 255, 0.95),
+            #e6f5ff 60%);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.navbar {
+    background: linear-gradient(90deg, var(--bubbles-dark), var(--bubbles-blue));
+}
+
+.navbar-brand img {
+    height: 40px;
+    margin-right: .5rem;
+}
+
+.nav-link.active {
+    font-weight: 600;
+    border-bottom: 2px solid var(--bubbles-yellow);
+}
+
+.hero {
+    background: radial-gradient(circle at top,
+            rgba(255, 255, 255, 0.95),
+            rgba(0, 143, 220, 0.15));
+    border-radius: 1.25rem;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.hero-title {
+    font-size: clamp(2rem, 3vw, 2.6rem);
+    font-weight: 700;
+    color: var(--bubbles-dark);
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: #234;
+}
+
+.bubble-card {
+    border-radius: 1.25rem;
+    border: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    width: auto;
+}
+
+.card img,
+.bubble-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.section-title {
+    font-weight: 700;
+    color: var(--bubbles-dark);
+}
+
+.badge-bubbles {
+    background-color: var(--bubbles-yellow);
+    color: #222;
+    font-weight: 600;
+}
+
+.btn-bubbles {
+    background-color: var(--bubbles-blue);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 999px;
+    padding-inline: 1.4rem;
+}
+
+.btn-bubbles:hover {
+    background-color: var(--bubbles-dark);
+    color: #fff;
+}
+
+.footer {
+    background-color: var(--bubbles-dark);
+    color: #eaf6ff;
+    padding: 1rem 0;
+    margin-top: 3rem;
+    font-size: .9rem;
+}
+
+.footer a {
+    color: var(--bubbles-yellow);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
